@@ -1,13 +1,15 @@
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
 
+ENV NODE_ENV=development
 RUN npm ci
 
 COPY . .
 
+ENV NODE_ENV=production
 RUN npm run build
 
 FROM nginx:alpine

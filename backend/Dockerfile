@@ -2,15 +2,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g typescript
-
 COPY package*.json ./
 
+ENV NODE_ENV=development
 RUN npm ci
 
 COPY . .
 
-RUN tsc
+RUN npm run build
 
 FROM node:22-alpine
 
@@ -18,6 +17,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
+ENV NODE_ENV=production
 RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
