@@ -10,7 +10,7 @@ services:
       - "${BACKEND_PORT:-3001}:3001"
     environment:
       - PORT=3001
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
       - NODE_ENV=${NODE_ENV:-production}
     restart: unless-stopped
     networks:
