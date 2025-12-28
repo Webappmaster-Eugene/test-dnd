@@ -9,19 +9,3 @@ export interface PaginatedResponse<T> {
   total: number;
   hasMore: boolean;
 }
-
-export interface AddItemRequest {
-  id: number;
-}
-
-export interface ReorderRequest {
-  itemId: number;
-  newIndex: number;
-}
-
-export interface QueuedOperation {
-  type: 'select' | 'deselect' | 'reorder';
-  itemId: number;
-  newIndex?: number;
-  timestamp: number;
-}

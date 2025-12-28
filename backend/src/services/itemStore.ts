@@ -1,5 +1,5 @@
 import { PaginatedResponse, PaginationParams } from '../types/index.js';
-import { ITEMS } from '../constants/index.js';
+import { ITEMS } from '../constants';
 
 class ItemStore {
   private allItems: Set<number>;
@@ -18,14 +18,14 @@ class ItemStore {
 
   getItems(params: PaginationParams, excludeSelected: boolean = true): PaginatedResponse<number> {
     const { offset, limit, filter } = params;
-    
+
     let items: number[] = [];
-    
+
     if (filter) {
-      for (const id of this.allItems) {
-        if (excludeSelected && this.selectedSet.has(id)) continue;
-        if (id.toString().includes(filter)) {
-          items.push(id);
+      const filterId = parseInt(filter, 10);
+      if (!isNaN(filterId) && this.allItems.has(filterId)) {
+        if (!(excludeSelected && this.selectedSet.has(filterId))) {
+          items.push(filterId);
         }
       }
     } else {
@@ -39,7 +39,7 @@ class ItemStore {
 
     const total = items.length;
     const paginatedItems = items.slice(offset, offset + limit);
-    
+
     return {
       items: paginatedItems,
       total,
@@ -49,16 +49,21 @@ class ItemStore {
 
   getSelectedItems(params: PaginationParams): PaginatedResponse<number> {
     const { offset, limit, filter } = params;
-    
+
     let items = this.selectedItems;
-    
+
     if (filter) {
-      items = items.filter(id => id.toString().includes(filter));
+      const filterId = parseInt(filter, 10);
+      if (!isNaN(filterId)) {
+        items = items.filter(id => id === filterId);
+      } else {
+        items = [];
+      }
     }
 
     const total = items.length;
     const paginatedItems = items.slice(offset, offset + limit);
-    
+
     return {
       items: paginatedItems,
       total,
@@ -98,16 +103,19 @@ class ItemStore {
     }
 
     if (filter) {
-      const filteredItems = this.selectedItems.filter(id => id.toString().includes(filter));
+      const filterId = parseInt(filter, 10);
+      const filteredItems = !isNaN(filterId)
+        ? this.selectedItems.filter(id => id === filterId)
+        : [];
       const filteredIndices = this.selectedItems
         .map((id, index) => ({ id, index }))
-        .filter(item => item.id.toString().includes(filter));
+        .filter(item => !isNaN(filterId) && item.id === filterId);
 
       const currentFilteredIndex = filteredItems.indexOf(itemId);
       if (currentFilteredIndex === -1) return false;
 
       const clampedNewIndex = Math.max(0, Math.min(newIndex, filteredItems.length - 1));
-      
+
       const currentGlobalIndex = this.selectedItems.indexOf(itemId);
       this.selectedItems.splice(currentGlobalIndex, 1);
 
@@ -131,7 +139,7 @@ class ItemStore {
       if (currentIndex === -1) return false;
 
       const clampedNewIndex = Math.max(0, Math.min(newIndex, this.selectedItems.length - 1));
-      
+
       this.selectedItems.splice(currentIndex, 1);
       this.selectedItems.splice(clampedNewIndex, 0, itemId);
     }

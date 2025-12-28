@@ -1,5 +1,5 @@
 import { itemStore } from './itemStore.js';
-import { QUEUE } from '../constants/index.js';
+import { QUEUE } from '../constants';
 
 interface QueuedAdd {
   id: number;
@@ -18,7 +18,7 @@ interface QueuedOperation {
 class RequestQueue {
   private addQueue: Map<number, QueuedAdd> = new Map();
   private operationQueue: Map<string, QueuedOperation> = new Map();
-  
+
   private addInterval: ReturnType<typeof setInterval> | null = null;
   private operationInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -58,7 +58,7 @@ class RequestQueue {
 
     for (const op of operations) {
       let result = false;
-      
+
       switch (op.type) {
         case 'select':
           result = itemStore.selectItem(op.itemId);
@@ -72,7 +72,7 @@ class RequestQueue {
           }
           break;
       }
-      
+
       op.resolve(result);
     }
 
@@ -84,12 +84,12 @@ class RequestQueue {
     if (itemStore.itemExists(id) || this.addQueue.has(id)) {
       return false;
     }
-    
+
     this.addQueue.set(id, {
       id,
       timestamp: Date.now(),
     });
-    
+
     return true;
   }
 
@@ -101,7 +101,7 @@ class RequestQueue {
   ): Promise<boolean> {
     return new Promise((resolve) => {
       const key = `${type}-${itemId}`;
-      
+
       this.operationQueue.set(key, {
         type,
         itemId,

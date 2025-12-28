@@ -1,5 +1,6 @@
 import { LeftPanel } from '@/components/LeftPanel';
 import { RightPanel } from '@/components/RightPanel';
+import { Toaster } from '@/components/ui/toast';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <RightPanel />
         </div>
       </div>
+      <Toaster position="bottom-right" />
     </div>
   );
 }

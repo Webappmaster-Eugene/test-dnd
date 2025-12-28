@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { useItemsStore } from '@/store/useItemsStore';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { UI_TEXT, TIMERS } from '@/constants';
+import { UI_TEXT } from '@/constants';
 
 export function LeftPanel() {
   const {
@@ -21,7 +22,6 @@ export function LeftPanel() {
   } = useItemsStore();
 
   const [newItemId, setNewItemId] = useState('');
-  const [addStatus, setAddStatus] = useState<string | null>(null);
 
   const { containerRef, sentinelRef } = useInfiniteScroll({
     onLoadMore: fetchLeftItems,
@@ -36,21 +36,20 @@ export function LeftPanel() {
   const handleAddItem = async () => {
     const id = parseInt(newItemId);
     if (isNaN(id)) {
-      setAddStatus(UI_TEXT.ADD_STATUS.INVALID_ID);
+      toast.error(UI_TEXT.ADD_STATUS.INVALID_ID);
       return;
     }
 
-    setAddStatus(UI_TEXT.ADD_STATUS.ADDING_TO_QUEUE);
-    const success = await addItem(id);
-    
-    if (success) {
-      setAddStatus(UI_TEXT.ADD_STATUS.ADDED_TO_QUEUE);
-      setNewItemId('');
-    } else {
-      setAddStatus(UI_TEXT.ADD_STATUS.ALREADY_EXISTS);
-    }
+    const idToAdd = id;
+    setNewItemId('');
 
-    setTimeout(() => setAddStatus(null), TIMERS.STATUS_CLEAR_DELAY_MS);
+    const success = await addItem(idToAdd);
+
+    if (success) {
+      toast.success(UI_TEXT.ADD_STATUS.ADDED_TO_QUEUE);
+    } else {
+      toast.error(UI_TEXT.ADD_STATUS.ALREADY_EXISTS);
+    }
   };
 
   const handleSelectItem = (id: number) => {
@@ -81,9 +80,6 @@ export function LeftPanel() {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        {addStatus && (
-          <div className="text-sm text-gray-600 mt-1">{addStatus}</div>
-        )}
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden p-0" style={{ minHeight: 0 }}>
         <div

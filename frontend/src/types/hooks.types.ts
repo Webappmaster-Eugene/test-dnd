@@ -5,7 +5,9 @@ export interface UseInfiniteScrollOptions {
   threshold?: number;
 }
 
+export type RefCallback = (node: HTMLDivElement | null) => void;
+
 export interface UseInfiniteScrollReturn {
-  containerRef: (node: HTMLDivElement | null) => void;
-  sentinelRef: (node: HTMLDivElement | null) => void;
+  containerRef: RefCallback;
+  sentinelRef: RefCallback;
 }

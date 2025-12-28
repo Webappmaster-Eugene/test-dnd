@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { itemStore } from '../services/itemStore.js';
 import { requestQueue } from '../services/requestQueue.js';
-import { ITEMS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/index.js';
+import { ITEMS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
 
 const router = Router();
 
@@ -32,7 +32,7 @@ router.post('/items', (req: Request, res: Response) => {
   }
 
   const queued = requestQueue.queueAdd(id);
-  
+
   if (!queued) {
     res.status(409).json({ error: ERROR_MESSAGES.ITEM_ALREADY_EXISTS });
     return;
@@ -60,7 +60,7 @@ router.post('/select/:id', async (req: Request, res: Response) => {
   }
 
   const result = await requestQueue.queueOperation('select', id);
-  
+
   if (result) {
     res.json({ message: SUCCESS_MESSAGES.ITEM_SELECTED, id });
   } else {
@@ -82,7 +82,7 @@ router.delete('/select/:id', async (req: Request, res: Response) => {
   }
 
   const result = await requestQueue.queueOperation('deselect', id);
-  
+
   if (result) {
     res.json({ message: SUCCESS_MESSAGES.ITEM_DESELECTED, id });
   } else {
@@ -104,7 +104,7 @@ router.put('/selected/reorder', async (req: Request, res: Response) => {
   }
 
   const result = await requestQueue.queueOperation('reorder', itemId, newIndex, filter);
-  
+
   if (result) {
     res.json({ message: SUCCESS_MESSAGES.ITEM_REORDERED, itemId, newIndex });
   } else {
