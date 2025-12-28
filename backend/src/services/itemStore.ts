@@ -1,5 +1,5 @@
 import { PaginatedResponse, PaginationParams } from '../types/index.js';
-import { ITEMS } from '../constants';
+import { ITEMS } from '../constants/index.js';
 
 class ItemStore {
   private allItems: Set<number>;

@@ -1,5 +1,5 @@
 import { itemStore } from './itemStore.js';
-import { QUEUE } from '../constants';
+import { QUEUE } from '../constants/index.js';
 
 interface QueuedAdd {
   id: number;

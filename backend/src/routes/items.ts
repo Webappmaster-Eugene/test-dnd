@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { itemStore } from '../services/itemStore.js';
 import { requestQueue } from '../services/requestQueue.js';
-import { ITEMS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
+import { ITEMS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants/index.js';
 
 const router = Router();
 

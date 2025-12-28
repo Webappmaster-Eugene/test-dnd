@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import itemsRouter from './routes/items.js';
-import { SERVER, HTTP_METHODS } from './constants';
+import { SERVER, HTTP_METHODS } from './constants/index.js';
 
 const app = express();
 const PORT = process.env.PORT || SERVER.DEFAULT_PORT;
