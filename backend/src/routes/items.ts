@@ -28,6 +28,7 @@ router.post('/items', (req: Request, res: Response) => {
 
   if (typeof id !== 'number' || !Number.isInteger(id)) {
     res.status(400).json({ error: ERROR_MESSAGES.ID_MUST_BE_INTEGER });
+
     return;
   }
 
@@ -35,6 +36,7 @@ router.post('/items', (req: Request, res: Response) => {
 
   if (!queued) {
     res.status(409).json({ error: ERROR_MESSAGES.ITEM_ALREADY_EXISTS });
+
     return;
   }
 
@@ -46,16 +48,19 @@ router.post('/select/:id', async (req: Request, res: Response) => {
 
   if (isNaN(id)) {
     res.status(400).json({ error: ERROR_MESSAGES.INVALID_ID });
+
     return;
   }
 
   if (!itemStore.itemExists(id)) {
     res.status(404).json({ error: ERROR_MESSAGES.ITEM_NOT_FOUND });
+
     return;
   }
 
   if (itemStore.isSelected(id)) {
     res.status(409).json({ error: ERROR_MESSAGES.ITEM_ALREADY_SELECTED });
+
     return;
   }
 
@@ -73,11 +78,13 @@ router.delete('/select/:id', async (req: Request, res: Response) => {
 
   if (isNaN(id)) {
     res.status(400).json({ error: ERROR_MESSAGES.INVALID_ID });
+
     return;
   }
 
   if (!itemStore.isSelected(id)) {
     res.status(404).json({ error: ERROR_MESSAGES.ITEM_NOT_IN_SELECTED });
+
     return;
   }
 
@@ -95,11 +102,13 @@ router.put('/selected/reorder', async (req: Request, res: Response) => {
 
   if (typeof itemId !== 'number' || typeof newIndex !== 'number') {
     res.status(400).json({ error: ERROR_MESSAGES.ITEM_ID_AND_NEW_INDEX_REQUIRED });
+
     return;
   }
 
   if (!itemStore.isSelected(itemId)) {
     res.status(404).json({ error: ERROR_MESSAGES.ITEM_NOT_IN_SELECTED });
+
     return;
   }
 

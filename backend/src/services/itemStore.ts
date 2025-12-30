@@ -76,15 +76,18 @@ class ItemStore {
       return false;
     }
     this.allItems.add(id);
+
     return true;
   }
 
   selectItem(id: number): boolean {
     if (!this.allItems.has(id) || this.selectedSet.has(id)) {
+
       return false;
     }
     this.selectedItems.push(id);
     this.selectedSet.add(id);
+
     return true;
   }
 
@@ -94,6 +97,7 @@ class ItemStore {
     }
     this.selectedItems = this.selectedItems.filter(item => item !== id);
     this.selectedSet.delete(id);
+
     return true;
   }
 

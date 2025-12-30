@@ -142,6 +142,7 @@ export const createReorderItem = (set: SetState, get: GetState) => {
 export const createAddItem = () => {
   return async (id: number) => {
     const success = await itemsApi.addItem(id);
+
     return success;
   };
 };
